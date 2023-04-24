@@ -10,6 +10,7 @@ MY_PASSWORD = 'example'
 MY_LAT = 40.4169
 MY_LONG = -3.7035
 
+
 def is_iss_overhead():
     response = requests.get(url='http://api.open-notify.org/iss-now.json')
     response.raise_for_status()
@@ -21,6 +22,7 @@ def is_iss_overhead():
 
     if MY_LAT - 5 <= iss_latitude <= MY_LAT + 5 and MY_LONG - 5 <= iss_longitude <= MY_LONG + 5:
         return True
+
 
 def is_night():
     parameters = {
@@ -38,6 +40,7 @@ def is_night():
     time_now = datetime.now().hour
     if time_now >= sunset or time_now <= sunrise:
         return True
+
 
 if is_night() and is_iss_overhead():
     connection = smtplib.SMTP('smtp.gmail.com')
