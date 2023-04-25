@@ -16,6 +16,7 @@ for item in manage_cookies:
         consent = item
 consent.click()
 
+sleep(1)
 accept = driver.find_element(By.XPATH, '/html/body/div[1]/div/a[1]')
 accept.click()
 
@@ -40,8 +41,7 @@ while is_running:
         except:
             pass
         counter = 0
-    for i in range(20):
-        big_cookie.click()
+    big_cookie.click()
     counter += 1
     if keyboard.is_pressed("p"):
         is_running = False
