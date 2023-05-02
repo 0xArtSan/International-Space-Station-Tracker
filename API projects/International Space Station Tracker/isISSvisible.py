@@ -21,6 +21,7 @@ def is_iss_overhead():
     iss_latitude = float(data.json()['iss_position']['latitude'])
 
     if MY_LAT - 5 <= iss_latitude <= MY_LAT + 5 and MY_LONG - 5 <= iss_longitude <= MY_LONG + 5:
+        print('true')
         return True
 
 
