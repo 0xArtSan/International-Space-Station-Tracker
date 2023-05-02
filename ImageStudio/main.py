@@ -28,9 +28,17 @@ if image_folder.exists():
     # Rename them
     image_list = rename(file_list)
 
+# create a folder in the same fashion ("001") and put there all the images
+counter = 0
+try:
+    new_folder = Path(f"{counter:03d}")
+    new_folder.mkdir(parents=True)
+except:
+    counter += 1
+    new_folder = Path(f"{counter:03d}")
+    new_folder.mkdir(parents=True)
 
-# TO DO
-#   create a folder in the same fashion ("000001") and put there all the images
+
 #   Treat the images making copies with the desired effect and/or comparison mode
 
 ## Effects: BW, extraction of colors (paleta), RGB total values, extraction of color (solo el lineart)
