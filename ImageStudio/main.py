@@ -7,15 +7,15 @@ def rename(directory_list_files):
         if item.is_file():
             rename_list.append(item)
 
-    counter = 1
+    rename_counter = 1
     for item in rename_list:
         extension = item.suffix
-        new_name = str(f"{counter:03d}") + extension
+        new_name = str(f"{rename_counter:03d}") + extension
         try:
             item.rename(Path(image_folder, new_name))
         except:
             pass
-        counter += 1
+        rename_counter += 1
     return rename_list
 
 
@@ -38,7 +38,7 @@ except:
     new_folder = Path(f"{counter:03d}")
     new_folder.mkdir(parents=True)
 
-
+for item in
 #   Treat the images making copies with the desired effect and/or comparison mode
 
 ## Effects: BW, extraction of colors (paleta), RGB total values, extraction of color (solo el lineart)
