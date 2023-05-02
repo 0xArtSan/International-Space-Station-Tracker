@@ -6,7 +6,7 @@ LAT = '40.7114'
 LONG = '-4.0542'
 
 # Temperature, precipitation, cloud cover and uv index thresholds, in that order
-TEMP = 15
+TEMP = 25
 PREC = 1
 CC = 50
 UV = 5
