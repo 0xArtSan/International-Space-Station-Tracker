@@ -13,8 +13,9 @@ if not image_folder.exists():
     exit()
 
 # Checking if there are any .webp file and convert it to .png
-new_file_list = no_webp(image_folder)
+no_webp_image_list = no_webp(image_folder)
 # Creating a new directory and renaming files (leaves behind .webp images)
-image_list = rename_images(new_file_list)
+image_list = rename_images(no_webp_image_list)
+print(list(image_list))
 
-# TODO: Ask the desired treatment and if they want copies and/or comparison images
+# TODO: Ask if they want their files to be renamed, the desired treatment and if they want copies/comparison images

@@ -5,21 +5,24 @@ from PIL import Image
 
 
 # Input: The path where the files must be to be processed
-# Output: A list of the paths to all files in the image directory
+# Output: A list of the paths to all files in the image directory with .webp images filtered out
 # Function: Check all files and converts all .webp images to .png
 def no_webp(directory):
     # Create a list of all the data that is inside image_folder
     file_list = directory.iterdir()
     for item in file_list:
-        # Checking files only
-        if item.is_file():
-            # Checking if the file is a .webp image
-            if item.suffix == '.webp':
-                # Converting all .webp images to png
-                image = Image.open(item).convert('RGB')
-                new_path = f'ImageFolder/{item.stem}.png'
-                image.save(new_path, 'png')
-    return directory.iterdir()
+        # Checking files only and if the file is a .webp image
+        if item.is_file() and item.suffix == '.webp':
+            # Converting all .webp images to png
+            image = Image.open(item).convert('RGB')
+            new_path = f'ImageFolder/{item.stem}.png'
+            image.save(new_path, 'png')
+    filtered_list = []
+    file_list = directory.iterdir()
+    for item in file_list:
+        if item.is_file() and item.suffix != '.webp':
+            filtered_list.append(item)
+    return filtered_list
 
 
 # Input:
@@ -37,15 +40,11 @@ def create_directory():
 # Input:
 # Output:
 # Function:
-def rename_images(directory_list_files):
+def rename_images(filtered_list):
     new_folder = create_directory()
-    rename_list = []
-    for item in directory_list_files:
-        if item.is_file() and item.suffix != '.webp':
-            rename_list.append(item)
 
     rename_counter = 1
-    for item in rename_list:
+    for item in filtered_list:
         extension = item.suffix
         new_name = str(f"{rename_counter:03d}") + extension
         try:
@@ -54,7 +53,7 @@ def rename_images(directory_list_files):
             rename_counter += 1
             item.rename(Path(new_folder, new_name))
         rename_counter += 1
-    return rename_list
+    return new_folder.iterdir()
 
 
 # Input:
