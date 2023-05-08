@@ -4,17 +4,27 @@ import extcolors
 from PIL import Image
 
 
-def no_webp(directory_list_files, directory):
-    for item in directory_list_files:
+# Input: The path where the files must be to be processed
+# Output: A list of the paths to all files in the image directory
+# Function: Check all files and converts all .webp images to .png
+def no_webp(directory):
+    # Create a list of all the data that is inside image_folder
+    file_list = directory.iterdir()
+    for item in file_list:
+        # Checking files only
         if item.is_file():
+            # Checking if the file is a .webp image
             if item.suffix == '.webp':
+                # Converting all .webp images to png
                 image = Image.open(item).convert('RGB')
                 new_path = f'ImageFolder/{item.stem}.png'
                 image.save(new_path, 'png')
     return directory.iterdir()
 
 
-# create a folder in the same fashion ("001") and put there all the images
+# Input:
+# Output:
+# Function:
 def create_directory():
     counter = 0
     while Path(f"{counter:03d}").exists():
@@ -24,6 +34,9 @@ def create_directory():
     return new_folder
 
 
+# Input:
+# Output:
+# Function:
 def rename_images(directory_list_files):
     new_folder = create_directory()
     rename_list = []
@@ -44,6 +57,9 @@ def rename_images(directory_list_files):
     return rename_list
 
 
+# Input:
+# Output:
+# Function:
 def black_white(original_image):
     image = cv.imread(original_image)
     bw_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
@@ -51,6 +67,9 @@ def black_white(original_image):
 
 
 # TODO: crear una imagen de 3x3 con los colores extraidos
+# Input:
+# Output:
+# Function:
 def palette(original_image):
     image = Image.open(original_image)
     color, pixel_count = extcolors.extract_from_image(image)
@@ -63,7 +82,11 @@ def palette(original_image):
         if counter > 8:
             return color_palette
 
-#TODO: crear una imagen sobre fondo blanco con las mismas dimensiones que la imagen original y el contorno dibujado
+
+# TODO: crear una imagen sobre fondo blanco con las mismas dimensiones que la imagen original y el contorno dibujado
+# Input:
+# Output:
+# Function:
 def contour(original_image):
     image = cv.imread(original_image)
     image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
@@ -72,6 +95,9 @@ def contour(original_image):
     cv.drawContours(image_gray, contours, -1, (0, 0, 0), 1)
 
 
+# Input:
+# Output:
+# Function:
 def compound(original_image, modified_image):
     image_1 = cv.imread(original_image)
     image_2 = cv.imread(modified_image)
@@ -79,7 +105,6 @@ def compound(original_image, modified_image):
     return compounded_image
 
 
-## Hay que guardar el contorno en un lugar diferente
 # test_path = '000/001.jpg'
 # no_webp('000/001.png')
 # cv.imshow('bandw', bw_image)
