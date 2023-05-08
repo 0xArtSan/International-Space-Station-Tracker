@@ -43,7 +43,6 @@ def create_directory():
 # Function:
 def rename_images(filtered_list):
     new_folder = create_directory()
-
     rename_counter = 1
     for item in filtered_list:
         extension = item.suffix
@@ -66,7 +65,6 @@ def black_white(original_image):
     return bw_image
 
 
-# TODO: escribir el codigo de color y el % en cada cuadrado
 # Input:
 # Output:
 # Function:
@@ -76,21 +74,25 @@ def palette(original_image):
     color_palette = []
     counter = 0
     for item in color:
-        percentage = (item[1]/pixel_count)*100
+        percentage = str(round((item[1]/pixel_count)*100, 2)) + '%'
         counter += 1
         color_palette.append((item[0], percentage))
         if counter > 8:
             image = cv.imread(original_image)
             height, width, channels = image.shape
             image_palette = np.zeros((height, width, 3), dtype=np.uint8)
-            coordinate_1 = int(height/3)
-            coordinate_2 = int(width/3)
+            coordinate_x = int(height/3)
+            coordinate_y = int(width/3)
             counter_2 = 0
             for i in range(3):
                 for j in range(3):
-                    top = (coordinate_1*j, coordinate_2*i)
-                    bot = (coordinate_1*(j+1), coordinate_2*(i+1))
-                    cv.rectangle(image_palette, (top), (bot), (color_palette[counter_2][0]), -1)
+                    top = (coordinate_x*j, coordinate_y*i)
+                    bot = (coordinate_x*(j+1), coordinate_y*(i+1))
+                    cv.rectangle(image_palette, top, bot, (color_palette[counter_2][0]), -1)
+                    cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
+                    cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
+                    cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
+                    cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
                     counter_2 += 1
             return image_palette
 
@@ -118,11 +120,3 @@ def compound(original_image, modified_image):
     image_1 = cv.imread(original_image)
     compounded_image = cv.hconcat([image_1, modified_image])
     return compounded_image
-
-
-test_path = '000/001.png'
-# print(palette('000/001.png'))
-x = palette(test_path)
-cv.imshow('bandw', x)
-cv.waitKey(0)
-cv.destroyAllWindows()

@@ -16,10 +16,34 @@ if not image_folder.exists():
 no_webp_image_list = no_webp(image_folder)
 # Creating a new directory and renaming files (leaves behind .webp images)
 image_list = rename_images(no_webp_image_list)
-print(list(image_list))
 
-# TODO: Ask if they want their files to be renamed, the desired treatment and if they want copies/comparison images
-renamed = input()
-treatment = input()
-copies = input()
-comparison = input()
+
+options_treatment = ['bw', 'palette', 'contour']
+options_copies = ['copies', 'comparison', 'both']
+treated_image_list = []
+
+print('Welcome! For more info write help')
+
+treatment = input('What image treatment do you want?(bw, palette, contour) ')
+copies = input('Do you want copies, comparison or both? ')
+
+help_message = 'Help message'
+
+if treatment == 'help' or treatment not in options_treatment or copies == 'help' or copies not in options_copies:
+    print(help_message)
+    exit()
+
+if treatment == 'bw':
+    for item in image_list:
+        treated_image_list.append(black_white(item))
+elif treatment == 'palette':
+    for item in image_list:
+        treated_image_list.append(palette(item))
+elif treatment == 'contour':
+    for item in image_list:
+        treated_image_list.append(contour(item))
+
+# TODO: finish copies: save the new images with different names...
+if copies == 'copies' or copies == 'both':
+    for item in treated_image_list:
+        pass
