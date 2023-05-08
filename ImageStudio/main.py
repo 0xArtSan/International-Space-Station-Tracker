@@ -19,3 +19,7 @@ image_list = rename_images(no_webp_image_list)
 print(list(image_list))
 
 # TODO: Ask if they want their files to be renamed, the desired treatment and if they want copies/comparison images
+renamed = input()
+treatment = input()
+copies = input()
+comparison = input()

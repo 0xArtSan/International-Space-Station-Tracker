@@ -2,6 +2,7 @@ import cv2 as cv
 from pathlib import Path
 import extcolors
 from PIL import Image
+import numpy as np
 
 
 # Input: The path where the files must be to be processed
@@ -65,7 +66,7 @@ def black_white(original_image):
     return bw_image
 
 
-# TODO: crear una imagen de 3x3 con los colores extraidos
+# TODO: escribir el codigo de color y el % en cada cuadrado
 # Input:
 # Output:
 # Function:
@@ -79,19 +80,35 @@ def palette(original_image):
         counter += 1
         color_palette.append((item[0], percentage))
         if counter > 8:
-            return color_palette
+            image = cv.imread(original_image)
+            height, width, channels = image.shape
+            image_palette = np.zeros((height, width, 3), dtype=np.uint8)
+            coordinate_1 = int(height/3)
+            coordinate_2 = int(width/3)
+            counter_2 = 0
+            for i in range(3):
+                for j in range(3):
+                    top = (coordinate_1*j, coordinate_2*i)
+                    bot = (coordinate_1*(j+1), coordinate_2*(i+1))
+                    cv.rectangle(image_palette, (top), (bot), (color_palette[counter_2][0]), -1)
+                    counter_2 += 1
+            return image_palette
 
 
-# TODO: crear una imagen sobre fondo blanco con las mismas dimensiones que la imagen original y el contorno dibujado
 # Input:
 # Output:
 # Function:
 def contour(original_image):
     image = cv.imread(original_image)
     image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
     edges = cv.Canny(image_gray, 100, 200)
     contours, hierarchy = cv.findContours(edges, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(image_gray, contours, -1, (0, 0, 0), 1)
+
+    height, width, channels = image.shape
+    image_contour = 255*np.ones((height, width, 3), dtype=np.uint8)
+    cv.drawContours(image_contour, contours, -1, (0, 0, 0), 1)
+    return image_contour
 
 
 # Input:
@@ -99,13 +116,13 @@ def contour(original_image):
 # Function:
 def compound(original_image, modified_image):
     image_1 = cv.imread(original_image)
-    image_2 = cv.imread(modified_image)
-    compounded_image = cv.hconcat([image_1, image_2])
+    compounded_image = cv.hconcat([image_1, modified_image])
     return compounded_image
 
 
-# test_path = '000/001.jpg'
-# no_webp('000/001.png')
-# cv.imshow('bandw', bw_image)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+test_path = '000/001.png'
+# print(palette('000/001.png'))
+x = palette(test_path)
+cv.imshow('bandw', x)
+cv.waitKey(0)
+cv.destroyAllWindows()
