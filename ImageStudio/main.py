@@ -40,7 +40,6 @@ if treatment == 'bw':
 elif treatment == 'palette':
     for path in path_list:
         treated_image = palette(path)
-        print(treated_image)
         treated_image_list.append(treated_image)
 elif treatment == 'contour':
     for path in path_list:

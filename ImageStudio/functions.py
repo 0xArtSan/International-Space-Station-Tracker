@@ -80,8 +80,8 @@ def palette(original_image):
     image = cv.imread(str(original_image))
     height, width, channels = image.shape
     image_palette = np.zeros((height, width, 3), dtype=np.uint8)
-    coordinate_x = int(height/3)
-    coordinate_y = int(width/3)
+    coordinate_y = int(height/3)
+    coordinate_x = int(width/3)
     counter_2 = 0
     color_number = len(color_palette)
 
@@ -89,7 +89,7 @@ def palette(original_image):
         for j in range(3):
             top = (coordinate_x*j, coordinate_y*i)
             bot = (coordinate_x*(j+1), coordinate_y*(i+1))
-            if color_number > counter_2:
+            if color_number > counter_2 or counter_2 > 8:
                 cv.rectangle(image_palette, top, bot, (color_palette[counter_2][0]), -1)
                 cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
                 cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
@@ -139,7 +139,6 @@ for item in x:
     z = palette(str(item))
     y.append(z)
 for item in y:
-    # w = cv.imread(item)
     cv.imshow('graycsale image', item)
     cv.waitKey(0)
     cv.destroyAllWindows()
