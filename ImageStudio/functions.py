@@ -53,14 +53,15 @@ def rename_images(filtered_list):
             rename_counter += 1
             item.rename(Path(new_folder, new_name))
         rename_counter += 1
-    return new_folder.iterdir()
+    new_list = new_folder.iterdir()
+    return new_list
 
 
 # Input:
 # Output:
 # Function:
 def black_white(original_image):
-    image = cv.imread(original_image)
+    image = cv.imread(str(original_image))
     bw_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     return bw_image
 
@@ -69,39 +70,40 @@ def black_white(original_image):
 # Output:
 # Function:
 def palette(original_image):
-    image = Image.open(original_image)
+    image = Image.open(str(original_image))
     color, pixel_count = extcolors.extract_from_image(image)
     color_palette = []
-    counter = 0
     for item in color:
         percentage = str(round((item[1]/pixel_count)*100, 2)) + '%'
-        counter += 1
         color_palette.append((item[0], percentage))
-        if counter > 8:
-            image = cv.imread(original_image)
-            height, width, channels = image.shape
-            image_palette = np.zeros((height, width, 3), dtype=np.uint8)
-            coordinate_x = int(height/3)
-            coordinate_y = int(width/3)
-            counter_2 = 0
-            for i in range(3):
-                for j in range(3):
-                    top = (coordinate_x*j, coordinate_y*i)
-                    bot = (coordinate_x*(j+1), coordinate_y*(i+1))
-                    cv.rectangle(image_palette, top, bot, (color_palette[counter_2][0]), -1)
-                    cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
-                    cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
-                    cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
-                    cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
-                    counter_2 += 1
-            return image_palette
+
+    image = cv.imread(str(original_image))
+    height, width, channels = image.shape
+    image_palette = np.zeros((height, width, 3), dtype=np.uint8)
+    coordinate_x = int(height/3)
+    coordinate_y = int(width/3)
+    counter_2 = 0
+    color_number = len(color_palette)
+
+    for i in range(3):
+        for j in range(3):
+            top = (coordinate_x*j, coordinate_y*i)
+            bot = (coordinate_x*(j+1), coordinate_y*(i+1))
+            if color_number > counter_2:
+                cv.rectangle(image_palette, top, bot, (color_palette[counter_2][0]), -1)
+                cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
+                cv.putText(image_palette, str(color_palette[counter_2][0]), (top[0], top[1]+int(width/6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
+                cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 3, 2)
+                cv.putText(image_palette, str(color_palette[counter_2][1]), (top[0], top[1]+int(width/6)+25), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, 2)
+            counter_2 += 1
+    return image_palette
 
 
 # Input:
 # Output:
 # Function:
 def contour(original_image):
-    image = cv.imread(original_image)
+    image = cv.imread(str(original_image))
     image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
     edges = cv.Canny(image_gray, 100, 200)
@@ -117,6 +119,27 @@ def contour(original_image):
 # Output:
 # Function:
 def compound(original_image, modified_image):
-    image_1 = cv.imread(original_image)
+    image_1 = cv.imread(str(original_image))
     compounded_image = cv.hconcat([image_1, modified_image])
     return compounded_image
+
+
+def save_and_name(image, path, method):
+    name = str(path.stem)
+    extension = str(path.suffix)
+    directory = str(path.parent)
+    filename = directory + '/' + name + '-' + method + extension
+    cv.imwrite(filename, image)
+
+
+x = list(Path('000').iterdir())
+y = []
+counter = 0
+for item in x:
+    z = palette(str(item))
+    y.append(z)
+for item in y:
+    # w = cv.imread(item)
+    cv.imshow('graycsale image', item)
+    cv.waitKey(0)
+    cv.destroyAllWindows()

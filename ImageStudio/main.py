@@ -16,7 +16,7 @@ if not image_folder.exists():
 no_webp_image_list = no_webp(image_folder)
 # Creating a new directory and renaming files (leaves behind .webp images)
 image_list = rename_images(no_webp_image_list)
-
+path_list = list(image_list)
 
 options_treatment = ['bw', 'palette', 'contour']
 options_copies = ['copies', 'comparison', 'both']
@@ -34,16 +34,29 @@ if treatment == 'help' or treatment not in options_treatment or copies == 'help'
     exit()
 
 if treatment == 'bw':
-    for item in image_list:
-        treated_image_list.append(black_white(item))
+    for path in path_list:
+        treated_image = black_white(path)
+        treated_image_list.append(treated_image)
 elif treatment == 'palette':
-    for item in image_list:
-        treated_image_list.append(palette(item))
+    for path in path_list:
+        treated_image = palette(path)
+        print(treated_image)
+        treated_image_list.append(treated_image)
 elif treatment == 'contour':
-    for item in image_list:
-        treated_image_list.append(contour(item))
+    for path in path_list:
+        treated_image = contour(path)
+        treated_image_list.append(treated_image)
 
 # TODO: finish copies: save the new images with different names...
+counter = 0
 if copies == 'copies' or copies == 'both':
     for item in treated_image_list:
-        pass
+        save_and_name(item, path_list[counter], copies)
+        counter += 1
+
+if copies == 'comparison' or copies == 'both':
+    counter = 0
+    for item in treated_image_list:
+        compounded_image = compound(path_list[counter], item)
+        save_and_name(compounded_image, path_list[counter], copies)
+        counter += 1
