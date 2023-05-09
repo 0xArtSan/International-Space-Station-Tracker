@@ -5,6 +5,7 @@ print('Welcome! For more info write help')
 treatment = input('What image treatment do you want?(bw, palette, contour) ')
 if treatment == 'help':
     print(help_message)
+    exit()
 
 copies = input('Do you want a copy, comparison or both? ')
 

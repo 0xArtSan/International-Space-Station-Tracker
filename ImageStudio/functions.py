@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 
 
-# Input: The path where the files must be to be processed
+# Input: The path where the files must be to be processed (ImageFolder/)
 # Output: A list of the paths to all files in the image directory with .webp images filtered out
 # Function: Check all files and converts all .webp images to .png
 def no_webp(directory):
@@ -26,9 +26,9 @@ def no_webp(directory):
     return filtered_list
 
 
-# Input:
-# Output:
-# Function:
+# Input: -
+# Output: Returns the path for the new directory in which the images will be renamed and treated
+# Function: Will check the closest directory name between 000 and 999 and make the directory first available
 def create_directory():
     counter = 0
     while Path(f"{counter:03d}").exists():
@@ -38,9 +38,9 @@ def create_directory():
     return new_folder
 
 
-# Input:
-# Output:
-# Function:
+# Input: Takes a list of paths to the images that are not .webp
+# Output: The list of all renamed and moved images in the new directory
+# Function: Renames and moves all images to the new directory
 def rename_images(filtered_list):
     new_folder = create_directory()
     rename_counter = 1
@@ -57,9 +57,9 @@ def rename_images(filtered_list):
     return new_list
 
 
-# Input:
-# Output:
-# Function:
+# Input: The path to an images that is going to be treated
+# Output: An image (np array) in black and white
+# Function: Opens the path and converts it to black and white
 def black_white(original_image):
     image = cv.imread(str(original_image))
     bw_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
@@ -67,9 +67,9 @@ def black_white(original_image):
     return bw_image
 
 
-# Input:
-# Output:
-# Function:
+# Input: The path to an images that is going to be treated
+# Output: An image with the same shape as the original divided in 9 rectangles colored with the 9 more common colors of the image and its percentage
+# Function: Extracts the 9 more common colors of the image and then draws the new image with the colors and percentages
 def palette(original_image):
     image = Image.open(str(original_image))
     color, pixel_count = extcolors.extract_from_image(image)
@@ -100,9 +100,9 @@ def palette(original_image):
     return image_palette
 
 
-# Input:
-# Output:
-# Function:
+# Input: The path to an images that is going to be treated
+# Output: An image that (to its best capacity) draws the contour of the objects in the input
+# Function: It extracts the contours via edge detection and draws it in a new image with the same shape as the original
 def contour(original_image):
     image = cv.imread(str(original_image))
     image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
@@ -116,15 +116,18 @@ def contour(original_image):
     return image_contour
 
 
-# Input:
-# Output:
-# Function:
+# Input: It takes a path to the original image and the image that has been treated and concatenates them horizontally
+# Output: An image that is the result of the horizontal concatenation of two images
+# Function: It opens the path of the original image and concatenates them together horizontally
 def compound(original_image, modified_image):
     image_1 = cv.imread(str(original_image))
     compounded_image = cv.hconcat([image_1, modified_image])
     return compounded_image
 
 
+# Input: It takes an image (np array), the path to the original image and a method in which the image has been treated
+# Output: -
+# Function: Saves the modified image adding '-{method}' to the filename, so they go together in the directory
 def save_and_name(image, path, method):
     name = str(path.stem)
     extension = str(path.suffix)
@@ -134,12 +137,12 @@ def save_and_name(image, path, method):
 
 
 help_message = "Explanation:\n" \
-               "This program is design as a drawing learning tool as it can extract the color palette," \
-               "show the value and extract the contour of any image (to its best capacity)\n" \
-               "This program will rename all the files in ImageFolder directory in order and it will convert any .webp file" \
-               "to .png." \
-               "Also, you can choose to make a copy with the desired effect or add the original image and the transformed image" \
-               "in a single file or both"
+               "This program is design as a drawing learning tool\nas it can extract the color palette,\n" \
+               "show the values\nand extract the contour of any image\n(to its best capacity)\n" \
+               "This program will rename all the files in ImageFolder directory in order\nand it will convert " \
+               "any .webp file to .png.\n" \
+               "Also, you can choose to make a copy with the desired effect or add the original image\nand the " \
+               "transformed image in a single file or both"
 
 options_treatment = ['bw', 'palette', 'contour', 'no']
 options_copies = ['copy', 'comparison', 'both', 'no']
