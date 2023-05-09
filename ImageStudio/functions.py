@@ -63,6 +63,7 @@ def rename_images(filtered_list):
 def black_white(original_image):
     image = cv.imread(str(original_image))
     bw_image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    bw_image = cv.cvtColor(bw_image, cv.COLOR_GRAY2BGR)
     return bw_image
 
 
@@ -132,13 +133,9 @@ def save_and_name(image, path, method):
     cv.imwrite(filename, image)
 
 
-x = list(Path('000').iterdir())
-y = []
-counter = 0
-for item in x:
-    z = palette(str(item))
-    y.append(z)
-for item in y:
-    cv.imshow('graycsale image', item)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+# x = list(Path('000').iterdir())
+# z = black_white(x[1])
+# y = compound(x[1], z)
+# cv.imshow('graycsale image', y)
+# cv.waitKey(0)
+# cv.destroyAllWindows()

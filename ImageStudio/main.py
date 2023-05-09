@@ -1,11 +1,23 @@
 from functions import *
 
+options_treatment = ['bw', 'palette', 'contour', 'no']
+options_copies = ['copy', 'comparison', 'both', 'no']
+
+print('Welcome! For more info write help')
+treatment = input('What image treatment do you want?(bw, palette, contour) ')
+copies = input('Do you want a copy, comparison or both? ')
+
+# TODO: a better help message...
+help_message = 'Help message'
+if treatment not in options_treatment or copies not in options_copies:
+    print(help_message)
+    exit()
+
+print("I'll let you know when I'm done")
 # Path where main is
 main_folder = Path.cwd()
-
 # Path where the images must be to be treated
 image_folder = Path('ImageFolder')
-
 # If prior directory doesn't exist, create it and exit
 if not image_folder.exists():
     image_folder.mkdir(parents=True)
@@ -18,21 +30,7 @@ no_webp_image_list = no_webp(image_folder)
 image_list = rename_images(no_webp_image_list)
 path_list = list(image_list)
 
-options_treatment = ['bw', 'palette', 'contour']
-options_copies = ['copies', 'comparison', 'both']
 treated_image_list = []
-
-print('Welcome! For more info write help')
-
-treatment = input('What image treatment do you want?(bw, palette, contour) ')
-copies = input('Do you want copies, comparison or both? ')
-
-help_message = 'Help message'
-
-if treatment == 'help' or treatment not in options_treatment or copies == 'help' or copies not in options_copies:
-    print(help_message)
-    exit()
-
 if treatment == 'bw':
     for path in path_list:
         treated_image = black_white(path)
@@ -46,11 +44,10 @@ elif treatment == 'contour':
         treated_image = contour(path)
         treated_image_list.append(treated_image)
 
-# TODO: finish copies: save the new images with different names...
 counter = 0
-if copies == 'copies' or copies == 'both':
+if copies == 'copy' or copies == 'both':
     for item in treated_image_list:
-        save_and_name(item, path_list[counter], copies)
+        save_and_name(item, path_list[counter], 'copy')
         counter += 1
 
 if copies == 'comparison' or copies == 'both':
@@ -59,3 +56,5 @@ if copies == 'comparison' or copies == 'both':
         compounded_image = compound(path_list[counter], item)
         save_and_name(compounded_image, path_list[counter], copies)
         counter += 1
+
+print('Done')
