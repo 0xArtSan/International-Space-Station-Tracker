@@ -133,9 +133,13 @@ def save_and_name(image, path, method):
     cv.imwrite(filename, image)
 
 
-# x = list(Path('000').iterdir())
-# z = black_white(x[1])
-# y = compound(x[1], z)
-# cv.imshow('graycsale image', y)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
+help_message = "Explanation:\n" \
+               "This program is design as a drawing learning tool as it can extract the color palette," \
+               "show the value and extract the contour of any image (to its best capacity)\n" \
+               "This program will rename all the files in ImageFolder directory in order and it will convert any .webp file" \
+               "to .png." \
+               "Also, you can choose to make a copy with the desired effect or add the original image and the transformed image" \
+               "in a single file or both"
+
+options_treatment = ['bw', 'palette', 'contour', 'no']
+options_copies = ['copy', 'comparison', 'both', 'no']

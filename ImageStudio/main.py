@@ -1,14 +1,13 @@
 from functions import *
 
-options_treatment = ['bw', 'palette', 'contour', 'no']
-options_copies = ['copy', 'comparison', 'both', 'no']
-
 print('Welcome! For more info write help')
+
 treatment = input('What image treatment do you want?(bw, palette, contour) ')
+if treatment == 'help':
+    print(help_message)
+
 copies = input('Do you want a copy, comparison or both? ')
 
-# TODO: a better help message...
-help_message = 'Help message'
 if treatment not in options_treatment or copies not in options_copies:
     print(help_message)
     exit()
